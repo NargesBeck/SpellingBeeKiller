@@ -1,3 +1,4 @@
+﻿using RTLTMPro;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,27 +13,32 @@ public class ClassicLevelMenu : MonoBehaviour
     // if won, end game
     // if attempts left, repeat
 
+    public enum LetterStates { NA, Filled, Correct, IncorrectPlace, Incorrect }
     private enum States { WaitingForInput, GradeInput, Won, Lost }
-    public enum LetterStates { Correct, IncorrectPlace, Incorrect }
 
     private States CurrentState;
     private int AttemptsLeft;
-    private string WordToGuess;
+    private char[] WordToGuess;
 
     [SerializeField] private RectTransform RowsParent;
     [SerializeField] private GameObject ClassicRowSectionPrefab;
+    [SerializeField] private RTLTextMeshPro MockInputTextUI;
 
-    private List<ClassicRowSectionHandler> SectionHandlers;
+    private List<ClassicRowSectionHandler> SectionHandlers = new List<ClassicRowSectionHandler>();
 
     private void Start()
     {
-        Show("Hello");
+        Show("زنبور");
     }
 
     public void Show(string wordToGuess)
     {
         AttemptsLeft = 5;
-        WordToGuess = wordToGuess;
+        WordToGuess = new char[wordToGuess.Length];
+        for (int i = 0; i < wordToGuess.Length; i++) 
+        {
+            WordToGuess[i] = wordToGuess[i];
+        }
         SectionHandlers = new List<ClassicRowSectionHandler>();
         SetMode(States.WaitingForInput);
     }
@@ -44,7 +50,7 @@ public class ClassicLevelMenu : MonoBehaviour
         switch(state)
         {
             case States.WaitingForInput:
-                GameObject row = Instantiate(ClassicRowSectionPrefab);
+                GameObject row = Instantiate(ClassicRowSectionPrefab, RowsParent);
                 SectionHandlers.Add(row.GetComponent<ClassicRowSectionHandler>());
                 SectionHandlers.LastOrDefault().Setup(WordToGuess.Length, ReadInputFromRow);
                 break;
@@ -53,6 +59,37 @@ public class ClassicLevelMenu : MonoBehaviour
 
     private void ReadInputFromRow(char[] guess)
     {
-        SectionHandlers.LastOrDefault().GetResultOnInput(null);
+        var output = new LetterStates[guess.Length];
+        for (int i = 0; i <= guess.Length; i++) 
+        {
+            // is correct
+            if (guess[i] == WordToGuess[i])
+            {
+                output[i] = LetterStates.Correct;
+                continue;
+            }
+
+            // could find
+            if (WordToGuess.Contains(guess[i]))
+            {
+                output[i] = LetterStates.IncorrectPlace;
+                continue;
+            }
+
+            // letter not found
+            output[i] = LetterStates.Incorrect;
+        }
+        SectionHandlers.LastOrDefault().GetResultOnInput(output);
+    }
+
+    public void SubmitGuessClick()
+    {
+        if (SectionHandlers.Count == 0)
+        {
+            Debug.Log("Submit what section exactly, sir?");
+            return;
+        }
+
+        SectionHandlers.LastOrDefault().TrySubmitSection();
     }
 }
