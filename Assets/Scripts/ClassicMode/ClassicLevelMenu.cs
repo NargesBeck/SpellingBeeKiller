@@ -26,16 +26,16 @@ public class ClassicLevelMenu : MonoBehaviour
 
     private List<ClassicRowSectionHandler> SectionHandlers = new List<ClassicRowSectionHandler>();
 
-    private void Start()
+    public void MochShow()
     {
-        Show("زنبور");
+        Show(MockInputTextUI.text.Trim());
     }
 
     public void Show(string wordToGuess)
     {
         AttemptsLeft = 5;
-        WordToGuess = new char[wordToGuess.Length];
-        for (int i = 0; i < wordToGuess.Length; i++) 
+        WordToGuess = new char[wordToGuess.Length - 1];
+        for (int i = 0; i < WordToGuess.Length; i++) 
         {
             WordToGuess[i] = wordToGuess[i];
         }

@@ -31,8 +31,13 @@ public class ClassicRowSectionHandler : MonoBehaviour
         if (na != null)
         {
             Debug.Log("Failed to submit");
+            return;
         }
-        OnSubmit?.Invoke(null);
+        char[] guess = new char[LetterBoxHandlers.Count];
+        for (int i = 0; i < guess.Length; i++)
+            guess[i] = LetterBoxHandlers[i].GetLetter();
+
+        OnSubmit?.Invoke(guess);
     }
 
     public void GetResultOnInput(ClassicLevelMenu.LetterStates[] letterStates)
