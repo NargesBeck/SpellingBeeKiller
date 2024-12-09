@@ -378,7 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3da7747801862243bc7b6684871f2d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoxUI: {fileID: 0}
+  BoxUI: {fileID: 8758531986582003234}
   ColorCorrect: {r: 0.5137255, g: 0.7372549, b: 0.49803922, a: 1}
   ColorIncorrect: {r: 0.7176471, g: 0.38039216, b: 0.34117648, a: 1}
   ColorIncorrectPlace: {r: 0.93333334, g: 0.92941177, b: 0.35686275, a: 1}

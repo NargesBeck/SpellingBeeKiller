@@ -24,7 +24,7 @@ public class ClassicLetterBoxHandler : MonoBehaviour
 
     public char GetLetter()
     {
-        return TextUI.text[0];
+        return TextUI.OriginalText[0];
     }
 
     public void SetState(ClassicLevelMenu.LetterStates state)
